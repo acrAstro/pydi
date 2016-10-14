@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 # Written by: AC Rogers, 2016-Oct-14
 
 def getOCP_Value(Nsim, dt, x0, xf, umax):
-'''
+    '''
     This function determines the value of Nsim for which the minimum-time,
     double integrator constraint satisfaction problem is satisfied.
 
@@ -21,7 +21,7 @@ def getOCP_Value(Nsim, dt, x0, xf, umax):
     OUTPUT:
             Nsim : Value of Nsim for which the constraint satisfaction problem
                    has a valid, optimal solution
-'''
+    '''
     # Create an instance of the double integrator
     db = DoubleIntegrator(2)
     # Make the state space matrices (we only need A and B)
@@ -48,8 +48,7 @@ def getOCP_Value(Nsim, dt, x0, xf, umax):
                    0 <= u[1,t], u[1,t] <= umax]
 
     # Set the boundary conditions
-    constr += [x[0,Nsim] == xf[0], x[1,Nsim] == xf[1], x[0,0] == x0[0], x[1,0] == x0[1]]
-
+    constr += [x[:,Nsim] == xf, x[:,0] == x0]
     # Create the problem
     prob = cvx.Problem(cvx.Minimize(cost), constr)
 
@@ -74,7 +73,7 @@ def getOCP_Value(Nsim, dt, x0, xf, umax):
                 constr += [x[:,t+1] == A*x[:,t] + B*u[:,t],
                            0 <= u[0,t], u[0,t] <= umax,
                            0 <= u[1,t], u[1,t] <= umax]
-            constr += [x[0,Nsim] == xf[0], x[1,Nsim] == xf[1], x[0,0] == x0[0], x[1,0] == x0[1]]
+            constr += [x[:,Nsim] == xf, x[:,0] == x0]
             prob = cvx.Problem(cvx.Minimize(cost), constr)
             prob.solve(verbose = True)
         return Nsim+1
@@ -90,7 +89,7 @@ def getOCP_Value(Nsim, dt, x0, xf, umax):
                 constr += [x[:,t+1] == A*x[:,t] + B*u[:,t],
                            0 <= u[0,t], u[0,t] <= umax,
                            0 <= u[1,t], u[1,t] <= umax]
-            constr += [x[0,Nsim] == xf[0], x[1,Nsim] == xf[1], x[0,0] == x0[0], x[1,0] == x0[1]]
+            constr += [x[:,Nsim] == xf, x[:,0] == x0]
             prob = cvx.Problem(cvx.Minimize(cost), constr)
             prob.solve(verbose = True)
         return Nsim
@@ -128,7 +127,7 @@ if __name__ == '__main__':
         constr += [x[:,t+1] == A*x[:,t] + B*u[:,t],
                    0 <= u[0,t], u[0,t] <= umax,
                    0 <= u[1,t], u[1,t] <= umax]
-    constr += [x[0,Nsim] == xf[0], x[1,Nsim] == xf[1], x[0,0] == x0[0], x[1,0] == x0[1]]
+    constr += [x[:,Nsim] == xf, x[:,0] == x0]
     prob = cvx.Problem(cvx.Minimize(cost), constr)
     prob.solve(verbose = True)
 

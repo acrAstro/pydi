@@ -20,10 +20,10 @@ class DoubleIntegrator:
         except InputError as me:
             print me.message
             return
-        
+
     def makeStateSpaceSystem(self):
         self.sysc = ctrl.matlab.ss(self.A, self.B, self.C, self.D)
-    
+
     def makeDiscreteSystem(self, dt, method):
         self.sysd = ctrl.matlab.c2d(self.sysc, dt, method)
 

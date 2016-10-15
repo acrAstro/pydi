@@ -32,8 +32,8 @@ def getOCP_Value(Nsim, dt, x0, xf, umax):
     B = db.sysd.B
 
     # Make the cvxpy environment variables
-    x = cvx.Variable(2, Nsim+1)
-    u = cvx.Variable(2, Nsim)
+    x = cvx.Variable(len(x0), Nsim+1)
+    u = cvx.Variable(B[0,:].size, Nsim)
 
     # Initialize an empty array of constraints
     constr = []
@@ -64,8 +64,8 @@ def getOCP_Value(Nsim, dt, x0, xf, umax):
     if (prob.status == 'optimal'):
         while (prob.status == 'optimal'):
             Nsim -= 1
-            x = cvx.Variable(2, Nsim+1)
-            u = cvx.Variable(2, Nsim)
+            x = cvx.Variable(len(x0), Nsim+1)
+            u = cvx.Variable(B[0,:].size, Nsim)
             constr = []
             cost = 0
             print "Trying " + str(Nsim)
@@ -80,8 +80,8 @@ def getOCP_Value(Nsim, dt, x0, xf, umax):
     elif (prob.status == 'infeasible'):
         while (prob.status == 'infeasible'):
             Nsim += 1
-            x = cvx.Variable(2, Nsim+1)
-            u = cvx.Variable(2, Nsim)
+            x = cvx.Variable(len(x0), Nsim+1)
+            u = cvx.Variable(B[0,:].size, Nsim)
             constr = []
             cost = 0
             print "Trying " + str(Nsim)
@@ -100,11 +100,11 @@ if __name__ == '__main__':
     # Time step
     dt = 0.01
     # Initial guess for solver
-    Nsim_try = 278
+    Nsim_try = 500
     # Initial conditions
-    x0 = [1.0,0.0]
+    x0 = [0.0,-2.0]
     # Terminal conditions
-    xf = [-1.0,0.0]
+    xf = [0.0,0.0]
     # Control constraint, u[ii] may never exceed this value
     umax = 1.0
 
@@ -119,8 +119,8 @@ if __name__ == '__main__':
     db.makeDiscreteSystem(dt,'zoh')
     A = db.sysd.A
     B = db.sysd.B
-    x = cvx.Variable(2, Nsim+1)
-    u = cvx.Variable(2, Nsim)
+    x = cvx.Variable(len(x0), Nsim+1)
+    u = cvx.Variable(B[0,:].size, Nsim)
     constr = []
     cost = 0
     for t in range(Nsim):

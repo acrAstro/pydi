@@ -38,4 +38,4 @@ if __name__ == '__main__':
     db = DoubleIntegrator(2)
     db.makeStateSpaceSystem()
     db.makeDiscreteSystem(0.1, 'zoh')
-    print db.sysd.A[0,1]
+    print db.sysd.B[0,:].size

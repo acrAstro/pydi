@@ -100,11 +100,11 @@ if __name__ == '__main__':
     # Time step
     dt = 0.01
     # Initial guess for solver
-    Nsim_try = 500
+    Nsim_try = 400
     # Initial conditions
     x0 = [0.0,-2.0]
     # Terminal conditions
-    xf = [0.0,0.0]
+    xf = [-1.0,0.0]
     # Control constraint, u[ii] may never exceed this value
     umax = 1.0
 
@@ -137,13 +137,21 @@ if __name__ == '__main__':
     U = u[0,:].value.A - u[1,:].value.A
 
     # Plot results.
-    f = plt.figure()
-    plt.subplot(221)
+    f = plt.figure(1)
+    plt.subplot(311)
     plt.plot(x[0,:].value.A.flatten())
-    plt.subplot(222)
+    plt.ylabel(r'$x(t)$')
+    plt.subplot(312)
     plt.plot(x[1,:].value.A.flatten())
-    plt.subplot(223)
+    plt.ylabel(r'$\dot{x}(t)$')
+    plt.subplot(313)
     plt.plot(U.flatten())
-    plt.subplot(224)
+    plt.ylim([-2*umax, 2*umax])
+    plt.ylabel(r'$u(t)$')
+    plt.xlabel(r'$t$')
+
+    f = plt.figure(2)
     plt.plot(x[0,:].value.A.flatten(), x[1,:].value.A.flatten())
+    plt.ylabel(r'$\dot{x}(t)$')
+    plt.xlabel(r'$x(t)$')
     plt.show()
